@@ -1,0 +1,36 @@
+{
+  "name": "hermes-tui-extension-core",
+  "version": "0.0.0-plan",
+  "type": "tui-extension-core",
+  "status": "planning",
+  "supports": {
+    "platforms": ["windows"],
+    "hermes": "local-research",
+    "tui": "native"
+  },
+  "plannedCapabilities": [
+    "slot-registry",
+    "module-store",
+    "module-host",
+    "module-snapshot",
+    "module-lifecycle",
+    "tui-doctor",
+    "compatibility-check"
+  ],
+  "nonGoals": [
+    "replace-hermes-tui",
+    "rewrite-input",
+    "rewrite-scroll",
+    "rewrite-message-renderer",
+    "business-module-logic",
+    "dynamic-js-plugin-loading"
+  ],
+  "sourceOfTruth": [
+    "E:/AI/github/hermes-tui-reverse-study/2026-05-25-hermes-tui-cockpit-theory.md",
+    "E:/AI/github/hermes-tui-reverse-study/2026-05-25-hermes-native-tui-extension-source-audit.md",
+    "E:/AI/github/hermes-tui-reverse-study/2026-05-25-hermes-tui-cockpit-layer-contract.md"
+  ],
+  "validation": [
+    "pwsh -ExecutionPolicy Bypass -File E:/AI/github/hermes-tui-reverse-study/tools/run-no-regression-baseline.ps1 -Mode Full -RunZhVerify"
+  ]
+}
