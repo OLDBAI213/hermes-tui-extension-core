@@ -96,15 +96,12 @@ interface TuiModuleSnapshot {
 
 ## Gateway 协议
 
-计划新增：
+已新增：
 
 - `tui.extension.version`
-- `tui.modules`
-- `tui.module.status`
-- `tui.module.refresh`
-- `tui.doctor`
+- `tui.module.update`
 
-计划新增 event：
+已新增 event：
 
 ```json
 {
@@ -117,6 +114,13 @@ interface TuiModuleSnapshot {
   }
 }
 ```
+
+后续再考虑：
+
+- `tui.modules`
+- `tui.module.status`
+- `tui.module.refresh`
+- `tui.doctor`
 
 ## 降级规则
 

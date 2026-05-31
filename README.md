@@ -2,7 +2,9 @@
 
 Hermes TUI Cockpit Layer 的扩展内核方案仓库。
 
-当前状态：方案形成中，尚不是可安装包。
+当前状态：v0.2 已开始落到 `E:\AI\hermes\hermes-agent` 本体代码，尚不是独立可安装包。
+
+2026-05-29 复审：当前 Hermes Agent v0.15.1 仍适配本项目 v0.2 MVP。快速验收 `pwsh -ExecutionPolicy Bypass -File E:\AI\github\hermes-tui-extension-core\verify.ps1` 通过，`Summary failed: 0`。本轮也在 Hermes 主仓补齐了后端 `tui.module.update` RPC、前端事件接入、`display.tui_modules` 配置同步和 `/tui-module-smoke` 本地命令。
 
 ## 它要解决什么
 
@@ -32,18 +34,27 @@ Hermes 原生 TUI
 
 它只负责让这些扩展以后能安全共存。
 
-## 核心能力
+## 已落地能力
 
-第一版只做这些：
+当前已经落到 Hermes 本体的第一刀：
 
 - `slot registry`
 - `moduleStore`
 - `TuiModuleHost`
 - `tui.module.update` event
 - `tui.extension.version` RPC
-- `tui.doctor` RPC 或本地诊断命令
-- fake module 验证模块状态机
-- Hermes 更新后的兼容检查
+- `tui.module.update` RPC
+- `/tui-module-smoke` 本地烟测命令
+- `/tui-doctor` 本地诊断命令
+- 模块 `loading/ok/stale/error/disabled/incompatible` 状态模型
+- 模块按 `slot/priority/minCols/enabled` 过滤显示
+- 网关退出时模块状态自动转为 `stale`
+
+还没落地：
+
+- 独立安装包
+- 真实飞书/股票/新闻业务模块
+- Hermes 更新后的自动兼容检查脚本
 
 ## 第一版边界
 
@@ -112,16 +123,32 @@ doctor 负责发现问题
 
 ## 当前验收口径
 
-现在还没有实现代码，所以验收不是“安装成功”，而是：
+现在的验收不是“安装成功”，而是：
 
-- 方案边界清楚。
-- 能解释为什么不是魔改或外挂。
-- 能指导后续实现顺序。
-- 能避免汉化、皮肤、飞书状态混在一个项目里。
-- 能给 Hermes 后续提交时提供清晰路线。
+- 默认 TUI 没有额外可见变化。
+- 收到 `tui.module.update` 后能进入独立 `moduleStore`。
+- 外部调用 `tui.module.update` RPC 后能按 session 发出同名事件。
+- `/tui-module-smoke` 能本地触发 `ok/loading/warning/stale/error/disabled/incompatible/clear` 状态。
+- 启用对应 `display.tui_modules` 后，模块能在固定 slot 显示。
+- `/tui-doctor` 能反查配置、快照和显示状态。
+- 新增功能不能影响输入框、滚动区、工具调用、reasoning、slash 命令。
 
-真正实现开始后，必须跑：
+必须跑：
 
 ```powershell
+pwsh -ExecutionPolicy Bypass -File E:\AI\github\hermes-tui-extension-core\verify.ps1 -RunTests
 pwsh -ExecutionPolicy Bypass -File E:\AI\github\hermes-tui-reverse-study\tools\run-no-regression-baseline.ps1 -Mode Full -RunZhVerify
+```
+
+日常快速确认只跑：
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File E:\AI\github\hermes-tui-extension-core\verify.ps1
+```
+
+最新完整通过报告：
+
+```text
+E:\AI\github\hermes-tui-reverse-study\tests\20260526-003332-no-regression-Full.txt
+Failed: 0
 ```

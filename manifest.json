@@ -1,21 +1,45 @@
 {
   "name": "hermes-tui-extension-core",
-  "version": "0.0.0-plan",
+  "version": "0.2.0",
   "type": "tui-extension-core",
-  "status": "planning",
+  "status": "mvp-in-hermes-source",
   "supports": {
     "platforms": ["windows"],
     "hermes": "local-research",
     "tui": "native"
   },
-  "plannedCapabilities": [
+  "implementedCapabilities": [
     "slot-registry",
     "module-store",
     "module-host",
     "module-snapshot",
     "module-lifecycle",
-    "tui-doctor",
+    "tui-module-update-event",
+    "tui-extension-version-rpc",
+    "tui-module-update-rpc",
+    "tui-doctor-local-command",
+    "tui-module-smoke-command",
+    "gateway-exit-stale",
+    "slot-priority-mincols-filtering"
+  ],
+  "plannedCapabilities": [
     "compatibility-check"
+  ],
+  "hermesSourceFiles": [
+    "ui-tui/src/domain/tuiModules.ts",
+    "ui-tui/src/app/tuiModuleStore.ts",
+    "ui-tui/src/app/tuiDoctor.ts",
+    "ui-tui/src/components/tuiModuleHost.tsx",
+    "ui-tui/src/components/appLayout.tsx",
+    "ui-tui/src/app/createGatewayEventHandler.ts",
+    "ui-tui/src/app/useMainApp.ts",
+    "ui-tui/src/app/slash/commands/debug.ts",
+    "ui-tui/src/app/slash/commands/core.ts",
+    "ui-tui/src/gatewayTypes.ts",
+    "tui_gateway/server.py"
+  ],
+  "extensionFiles": [
+    "verify.ps1"
   ],
   "nonGoals": [
     "replace-hermes-tui",
@@ -31,6 +55,10 @@
     "E:/AI/github/hermes-tui-reverse-study/2026-05-25-hermes-tui-cockpit-layer-contract.md"
   ],
   "validation": [
+    "pwsh -ExecutionPolicy Bypass -File E:/AI/github/hermes-tui-extension-core/verify.ps1 -RunTests",
+    "npm --prefix E:/AI/hermes/hermes-agent/ui-tui run type-check",
+    "npm --prefix E:/AI/hermes/hermes-agent/ui-tui test -- src/__tests__/tuiModules.test.ts src/__tests__/tuiModuleStore.test.ts src/__tests__/tuiModuleHost.test.tsx src/__tests__/createGatewayEventHandler.test.ts src/__tests__/createSlashHandler.test.ts",
+    "uv run python -m pytest -n0 --timeout-method=thread tests/test_tui_gateway_server.py::test_tui_extension_version_rpc_reports_protocol tests/test_tui_gateway_server.py::test_tui_module_update_emits_scoped_snapshot tests/test_tui_gateway_server.py::test_tui_module_update_accepts_top_level_snapshot_fields tests/test_tui_gateway_server.py::test_tui_module_update_rejects_missing_session_id tests/test_tui_gateway_server.py::test_tui_module_update_rejects_unknown_state tests/test_tui_gateway_server.py::test_complete_slash_includes_tui_module_smoke_command tests/test_tui_gateway_server.py::test_commands_catalog_includes_tui_module_smoke_command -q",
     "pwsh -ExecutionPolicy Bypass -File E:/AI/github/hermes-tui-reverse-study/tools/run-no-regression-baseline.ps1 -Mode Full -RunZhVerify"
   ]
 }
